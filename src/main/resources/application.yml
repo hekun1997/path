@@ -1,0 +1,80 @@
+
+spring:
+#配置数据库数据源等信息
+  datasource:
+    url: jdbc:mysql://localhost:3306/uestc?characterEncoding=utf-8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    initialization-mode: embedded
+    #指定数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 5000
+      # 状态监控
+      filter:
+        stat:
+          enabled: true
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 2000
+      # 监控过滤器
+      web-stat-filter:
+        enabled: true
+        exclusions:
+          - "*.js"
+          - "*.gif"
+          - "*.jpg"
+          - "*.png"
+          - "*.css"
+          - "*.ico"
+          - "/druid/*"
+      # druid 监控页面
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: admin
+        login-password: root
+        allow: 127.0.0.1
+#日志追踪
+logging:
+  level:
+    #针对不同的包，选择日志输出的级别
+    org:
+      springframework:
+        web: trace
+    coderxz:
+      uestc:
+        dao: debug
+
+mybatis-plus:
+  global-config:
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+      id-type: auto
+  # 指定mapper。xml的路径  classpath*不仅包含class路径，还包括jar文件中(class路径)进行查找。
+  mapper-locations: classpath*:mybatis/*.xml
+  type-aliases-package: coderxz.uestc.entity #别名包扫描
+  configuration:
+    map-underscore-to-camel-case: false  #驼峰命名映射，默认是开启的，由于我的数据库中的字段没有采用驼峰命名，
+
+#mybatis配置
+#mybatis:
+#  type-aliases-package: coderxz.uestc.entity
+  #如果xml文件没有放在接口方法的同一目录之下，我们也可以指定目录,如果想放在同一目录，创建文件夹时，coderxz\mybatis\mapper，这样在
+  #编译时，会将此文件夹与java源代码文件夹的coderxz.mybatis.mapper文件夹合并
+ # mapper-locations: classpath:mybatis/mapper/*.xml
+ #config-location: classpath:mybatis/config/mybatis-config.xml
+
+# PageHelper分页配置
+# 分页配置
+#pagehelper:
+#  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params: count=countSql
+
