@@ -28,17 +28,10 @@
             });
 
             var view = new MapView({
+                center: [102.54, 30.05],
                 container: "viewDiv",
                 map: map,
-                center: [-118.80543,34.02700],
-                zoom: 13
-            });
-
-            //在鼠标点击的时候，输出坐标     ["pointer-down","pointer-move"]
-            view.on(["click"], function(evt) {
-                latitude_value = evt.mapPoint.latitude
-                longitude_value = evt.mapPoint.longitude
-                console.log(latitude_value)
+                zoom: 9
             });
 
             //加入坐标转换的功能
@@ -47,25 +40,13 @@
             });
             view.ui.add(coordinateConversionWidget, "bottom-right");
 
-            //加入画图
-            var map = new Map({
-                basemap: "hybrid"
-            });
-
-            var view = new MapView({
-                center: [-80, 35],
-                container: "viewDiv",
-                map: map,
-                zoom: 3
-            });
-
+            //加入画图的代码
             // First create a point geometry (this is the location of the Titanic)
             var point = {
                     type: "point", // autocasts as new Point()
-                    longitude: -49.97,
-                    latitude: 41.73
+                    longitude: 102.54,
+                    latitude: 30.05
                 };
-
             // Create a symbol for drawing the point
             var markerSymbol = {
                 type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
@@ -76,16 +57,21 @@
                     width: 2
                 }
             };
-
             // Create a graphic and add the geometry and symbol to it
             var pointGraphic = new Graphic({
                 geometry: point,
                 symbol: markerSymbol
             });
-
             // Add the graphics to the view's graphics layer
             view.graphics.addMany([pointGraphic]);
 
+
+            //在鼠标点击的时候，输出坐标     ["pointer-down","pointer-move"]
+            view.on(["click"], function(evt) {
+                latitude_value = evt.mapPoint.latitude
+                longitude_value = evt.mapPoint.longitude
+                console.log(latitude_value+","+longitude_value)
+            });
 
 
         });
