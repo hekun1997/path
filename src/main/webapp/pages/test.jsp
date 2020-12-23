@@ -63,7 +63,8 @@
                 symbol: markerSymbol
             });
             // Add the graphics to the view's graphics layer
-            view.graphics.addMany([pointGraphic]);
+            // view.graphics.addMany([pointGraphic]);
+            view.graphics.add(pointGraphic);
 
 
             //在鼠标点击的时候，输出坐标     ["pointer-down","pointer-move"]
