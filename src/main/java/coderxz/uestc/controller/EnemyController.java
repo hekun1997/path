@@ -4,6 +4,7 @@ import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,5 +19,10 @@ public class EnemyController {
     @RequestMapping("/findAll.do")
     public List<Enemy> findAll(){
         return enemyService.queryEnemy(2,2);
+    }
+
+    @RequestMapping(value = "/runAPF",method = RequestMethod.GET,produces = "application/json; charset=utf-8")
+    public List<String> runAPF(){
+        return enemyService.runAPF();
     }
 }

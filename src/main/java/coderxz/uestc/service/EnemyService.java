@@ -21,4 +21,7 @@ public interface EnemyService {
      */
     List<Enemy>queryEnemyByArea(Integer x,Integer y);
 
+
+    List<String> runAPF();
+
 }

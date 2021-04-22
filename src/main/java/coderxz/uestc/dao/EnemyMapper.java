@@ -8,8 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-@Mapper
+@Service
 public interface EnemyMapper extends BaseMapper<Enemy> {
 
     @Insert("insert into enemy(latitude,longitude,type,topography,dist_50,dist_100,num_tank,num_commander,label) " +
