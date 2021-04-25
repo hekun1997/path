@@ -1,6 +1,7 @@
 package coderxz.uestc.service.Impl;
 
 import coderxz.uestc.dao.EnemyMapper;
+import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -36,12 +37,12 @@ public class EnemyServiceImpl implements EnemyService {
     }
 
     @Override
-    public List<String> runAPF() {
+    public List<String> runAPF(APFParams apfParams) {
         List<String> res= new LinkedList<>();
         String line;
         try{
             //从第三个参数开始为算法的入参
-            String[] comm=new String[]{"D:\\Anaconda3\\python.exe", "F:\\UESTC\\apf_enemy\\RunTheProject.py", "(1,1)","(22,22)","[(103.90542, 31.33254211)]","[(103.90542, 31.33254211)]"};
+            String[] comm=new String[]{"D:\\Anaconda3\\python.exe", "F:\\UESTC\\apf_enemy\\RunTheProject.py", apfParams.getStart(),apfParams.getEnd(),apfParams.getObstacles().toString(),apfParams.getEnemys().toString()};
             Process pr = Runtime.getRuntime().exec(comm);
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));
             while ((line = in.readLine()) != null) {

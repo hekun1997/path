@@ -26,18 +26,50 @@
 					class="fa fa-dashboard"></i> <span>首页</span></a></li>
 
 			<li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
-					<span>展示</span> <span class="pull-right-container"> <i
+					<span>路径规划展示</span> <span class="pull-right-container"> <i
 						class="fa fa-angle-left pull-right"></i>
 				</span>
 
 
 			</a>
 				<ul class="treeview-menu">
+<%--					<li id="system-setting"><a--%>
+<%--					&lt;%&ndash;<security:authorize access="hasRole('ROLE_ADMIN')">&ndash;%&gt;--%>
+<%--						href="${pageContext.request.contextPath}/enemy/findAll.do"> <i--%>
+<%--							class="fa fa-circle-o"></i> 经典轨迹显示--%>
+<%--					</a>--%>
+<%--				&lt;%&ndash;	</security:authorize>&ndash;%&gt;--%>
+<%--					</li>--%>
 					<li id="system-setting"><a
 						href="${pageContext.request.contextPath}/pages/test.jsp"> <i
 							class="fa fa-circle-o"></i> 路径规划
 					</a></li>
+<%--					<li id="system-setting"><a--%>
+<%--						href="${pageContext.request.contextPath}/permission/findAll.do">--%>
+<%--							<i class="fa fa-circle-o"></i> 展示敌方enemy运行方向--%>
+<%--					</a></li>--%>
+<%--					<li id="system-setting"><a--%>
+<%--						href="${pageContext.request.contextPath}/sysLog/findAll.do"> <i--%>
+<%--							class="fa fa-circle-o"></i> 我方受到威胁的点--%>
+<%--					</a></li>--%>
+				</ul></li>
+<%--			<li class="treeview"><a href="#"> <i class="fa fa-cube"></i>--%>
+<%--					<span>敌友军展示</span> <span class="pull-right-container"> <i--%>
+<%--						class="fa fa-angle-left pull-right"></i>--%>
+<%--				</span>--%>
+<%--			</a>--%>
+<%--				<ul class="treeview-menu">--%>
 
+<%--					<li id="system-setting"><a--%>
+<%--						href="${pageContext.request.contextPath}/enemy/findAll.do">--%>
+<%--							<i class="fa fa-circle-o"></i> 敌军展示--%>
+<%--					</a></li>--%>
+<%--					<li id="system-setting"><a--%>
+<%--						href="${pageContext.request.contextPath}/orders/findAll.do?page=1&size=4"> <i--%>
+<%--							class="fa fa-circle-o"></i> 友军展示--%>
+<%--					</a></li>--%>
+
+<%--				</ul></li>--%>
 
 		</ul>
 	</section>

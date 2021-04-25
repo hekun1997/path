@@ -1,5 +1,6 @@
 package coderxz.uestc.service;
 
+import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 
 import java.util.List;
@@ -22,6 +23,6 @@ public interface EnemyService {
     List<Enemy>queryEnemyByArea(Integer x,Integer y);
 
 
-    List<String> runAPF();
+    List<String> runAPF(APFParams apfParams);
 
 }

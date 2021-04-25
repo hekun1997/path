@@ -1,8 +1,10 @@
 package coderxz.uestc.controller;
 
+import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +24,7 @@ public class EnemyController {
     }
 
     @RequestMapping(value = "/runAPF",method = RequestMethod.GET,produces = "application/json; charset=utf-8")
-    public List<String> runAPF(){
-        return enemyService.runAPF();
+    public List<String> runAPF(@RequestBody APFParams apfParams){
+        return enemyService.runAPF(apfParams);
     }
 }
