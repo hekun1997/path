@@ -23,6 +23,6 @@ public interface EnemyService {
     List<Enemy>queryEnemyByArea(Integer x,Integer y);
 
 
-    List<String> runAPF(APFParams apfParams);
+    String runAPF(APFParams apfParams);
 
 }

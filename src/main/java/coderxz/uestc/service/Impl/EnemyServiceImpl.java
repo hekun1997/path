@@ -4,6 +4,7 @@ import coderxz.uestc.dao.EnemyMapper;
 import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
+import coderxz.uestc.util.NR;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class EnemyServiceImpl implements EnemyService {
     }
 
     @Override
-    public List<String> runAPF(APFParams apfParams) {
+    public String runAPF(APFParams apfParams) {
         List<String> res= new LinkedList<>();
         String line;
         try{
@@ -55,6 +56,6 @@ public class EnemyServiceImpl implements EnemyService {
             e.printStackTrace();
         }
 
-        return res;
+        return NR.r(res);
     }
 }

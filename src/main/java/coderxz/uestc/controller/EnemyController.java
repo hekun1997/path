@@ -24,7 +24,7 @@ public class EnemyController {
     }
 
     @RequestMapping(value = "/runAPF",method = RequestMethod.GET,produces = "application/json; charset=utf-8")
-    public List<String> runAPF(@RequestBody APFParams apfParams){
+    public String runAPF(@RequestBody APFParams apfParams){
         return enemyService.runAPF(apfParams);
     }
 }
