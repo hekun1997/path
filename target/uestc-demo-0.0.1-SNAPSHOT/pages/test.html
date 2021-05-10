@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="天地图"/>
+    <title>基于环境的无人车路径规划系统</title>
+    <script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=eef34973b12f7f60406421dc07128d87"></script>
+    <script src="http://lbs.tianditu.gov.cn/js/lib/jquery/jquery-1.7.2.min.js"></script>
+    <script src="http://cdn.bootcss.com/d3/3.5.17/d3.js " charset="utf-8"></script>
+    <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js"></script>
+    <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <style type="text/css">
+        body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+        #mapDiv{height:850px;width:100%;}
+        input,p { margin-top: 10px; margin-left: 5px; font-size: 14px;  }
+    </style>
+    <script>
+        var map, drivingRoute;
+        var zoom = 13;
+        var _CarTrack;
+        var startIcon = "http://lbs.tianditu.gov.cn/images/bus/start.png";	//起点图标
+        var endIcon = "http://lbs.tianditu.gov.cn/images/bus/end.png";		//终点图标
+        function onLoad() {
+            var imageURL = "http://t0.tianditu.gov.cn/img_w/wmts?" +
+                "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+                "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=eef34973b12f7f60406421dc07128d87";
+            //创建自定义图层对象
+            lay = new T.TileLayer(imageURL, {minZoom: 1, maxZoom: 18});
+            var config = {
+                layers: [lay],
+                policy: 0,	//驾车策略
+                onSearchComplete: searchResult,	//检索完成后的回调函数
+                showLabel: true
+            };
+            map = new T.Map('mapDiv',config);
+            lineTool = new T.PolylineTool(map,config);
+            map.centerAndZoom(new T.LngLat(103.90541999999999, 31.33476433), zoom);
+            //允许鼠标滚轮缩放地图
+            drivingRoute = new T.DrivingRoute(map, config);
+            //console.log(drivingRoute)
+            searchDrivingRoute1()
+            searchDrivingRoute2()
+            map.enableScrollWheelZoom();
+            /******************根据已知点集合绘制历史轨迹开始***********************/
+
+//线的一下基本配置
+            var lineconfig={
+                color: "red",            //线的颜色
+                weight: 2,               //线的宽度
+                opacity: 1,             //线的透明度
+                lineStyle:"solid"        //线的样式
+            };
+
+            //创建点对象集合并创建几个点放进集合中
+            var points = new Array();
+            points[0]=new T.LngLat(116.318090, 39.920270);
+            points[1]=new T.LngLat(116.211, 39.820272);
+            points[2]=new T.LngLat(116.1, 39.920276);
+            points[3]=new T.LngLat(116.1, 39.720276);
+
+            var line = new T.Polyline(points,lineconfig);//创建线条的对象
+
+            //向地图上添加线
+            map.addOverLay(line);
+
+            /******************根据已知点集合绘制历史轨迹结束***********************/
+            //创建右键菜单对象
+            var menu = new T.ContextMenu({width: 140});
+            var txtMenuItem = [
+                {
+                    text: '获得右键点击处坐标',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        alert(lnglat.getLng() + "," + lnglat.getLat());
+                    }
+                },
+                {
+                    text: '添加障碍物',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        var marker = new T.Marker(new T.LngLat(lnglat.getLng(), lnglat.getLat()));
+                        map.addOverLay(marker);
+                    }
+                },{
+                    text: '添加网格',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        glayer = new T.GridlineLayer({ });
+                        map.addOverLay(glayer);
+                    }
+                },
+                {
+                    text: '添加车辆',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        var icon = new T.Icon({
+                            iconUrl: "./car.jpg",
+                            iconSize: new T.Point(19, 27),
+                            iconAnchor: new T.Point(10, 25)
+                        });
+                        //向地图上添加自定义标注
+                        var marker = new T.Marker(new T.LngLat(lnglat.getLng(), lnglat.getLat()), {icon: icon});
+                        map.addOverLay(marker);
+                    }
+                }
+            ];
+
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                //添加菜单项
+                var item = new T.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback);
+                //item.disable();
+                menu.addItem(item);
+            }
+            map.addContextMenu(menu);
+        }
+        function searchDrivingRoute1() {
+            map.clearOverLays();
+            var startLngLat = new T.LngLat(103.90542,31.336431);
+            var endLngLat = new T.LngLat(103.87502,31.32618);
+            //驾车路线搜索
+            drivingRoute.search(startLngLat, endLngLat);
+        }
+        function searchDrivingRoute2() {
+            var startLngLat = new T.LngLat(103.87502,31.32618);
+            var endLngLat = new T.LngLat(103.81153,31.28149);
+            //驾车路线搜索
+            drivingRoute.search(startLngLat, endLngLat);
+        }
+
+        function createRoute(lnglats, lineColor) {
+            console.log(lnglats);
+            _CarTrack = new T.CarTrack(map, {
+                interval: 20,
+                speed: 10,
+                dynamicLine: true,
+                Datas: lnglats,
+                polylinestyle: {color: "#2C64A7", width: 5, opacity: 0.9}
+            })
+        }
+
+        //添加起始点
+        function createStartMarker(result) {
+            var startMarker = new T.Marker(result.getStart(), {
+                icon: new T.Icon({
+                    iconUrl: startIcon,
+                    iconSize: new T.Point(44, 34),
+                    iconAnchor: new T.Point(12, 31)
+                })
+            });
+            map.addOverLay(startMarker);
+            // var endMarker = new T.Marker(result.getEnd(), {
+            //     icon: new T.Icon({
+            //         iconUrl: endIcon,
+            //         iconSize: new T.Point(44, 34),
+            //         iconAnchor: new T.Point(12, 31)
+            //     })
+            // });
+            // map.addOverLay(endMarker);
+        }
+
+        function searchResult(result) {
+            //添加起始点
+            //createStartMarker(result);
+            obj = result;
+            //获取方案个数
+            var routes = result.getNumPlans();
+            for (var i = 0; i < routes; i++) {
+                //获得单条驾车方案结果对象
+                var plan = result.getPlan(i);
+                createRoute(plan.getPath());
+
+
+            }
+        }
+        function linetell() {
+            $.ajax({
+                type:"GET",
+                url:"/enemy/runAPF",
+                data:{
+                    start:"(103.90542,31.33476433)",
+                    end:"(103.9620867,31.25198656)",
+                    obstacles:"[(103.9548644, 31.29281989),(103.9551422, 31.29254211)]",
+                    enemys:"[(103.90542, 31.33254211)]"
+                },
+                success:function (res) {
+                    var result = res.data[0]  //算法的返回值
+                    var str = result.substr(1,result.length-2)
+                    var regex1 = /\((.+?)\)/g; // () 小括号
+                    var locations = str.match(regex1)  //经纬度坐标
+
+                    var lineconfig={
+                        color: "red",            //线的颜色
+                        weight: 2,               //线的宽度
+                        opacity: 1,             //线的透明度
+                        lineStyle:"solid"        //线的样式
+                    };
+
+                    //创建点对象集合
+                    var points = new Array();
+                    //遍历经纬度坐标放到集合中
+                    for(var i = 0; i < locations.length; i++) {
+                        var temp = locations[i].split(",")
+                        points[i]=new T.LngLat(parseFloat(temp[0].substr(1,temp[0].length-1)), parseFloat(temp[1].substr(0,temp[1].length-2)));
+                    }
+
+                    var line = new T.Polyline(points,lineconfig);//创建线条的对象
+                    //向地图上添加线
+                    map.addOverLay(line);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body onLoad="onLoad()">
+<div id="mapDiv"></div>
+<div >
+    <input type="button" value="开始" onClick="_CarTrack.start();"/>
+    <input type="button" value="暂停" onClick="_CarTrack.pause();"/>
+    <input type="button" value="结束" onClick="_CarTrack.stop();"/>
+    <input type="button" value="开启" onClick="lineTool.open();"/>
+    <input type="button" value="关闭" onClick="lineTool.close();"/>
+    <input type="button" value="路径规划" onClick="linetell();"/>
+</div>
+
+</body>
+</html>

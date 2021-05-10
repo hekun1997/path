@@ -39,11 +39,15 @@ public class EnemyServiceImpl implements EnemyService {
 
     @Override
     public String runAPF(APFParams apfParams) {
+        String start = apfParams.getStart();
+        String end = apfParams.getEnd();
+        String obstacles = apfParams.getObstacles().toString().replace("[[","[").replace("]]","]");
+        String enemys = apfParams.getEnemys().toString().replace("[[","[").replace("]]","]");
         List<String> res= new LinkedList<>();
         String line;
         try{
             //从第三个参数开始为算法的入参
-            String[] comm=new String[]{"D:\\Anaconda3\\python.exe", "F:\\UESTC\\apf_enemy\\RunTheProject.py", apfParams.getStart(),apfParams.getEnd(),apfParams.getObstacles().toString(),apfParams.getEnemys().toString()};
+            String[] comm=new String[]{"D:\\Anaconda3\\python.exe", "F:\\UESTC\\apf_enemy\\RunTheProject.py", start,end,obstacles,enemys};
             Process pr = Runtime.getRuntime().exec(comm);
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));
             while ((line = in.readLine()) != null) {

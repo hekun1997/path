@@ -41,7 +41,7 @@
 <%--				&lt;%&ndash;	</security:authorize>&ndash;%&gt;--%>
 <%--					</li>--%>
 					<li id="system-setting"><a
-						href="${pageContext.request.contextPath}/pages/test.jsp"> <i
+						href="${pageContext.request.contextPath}/pages/test.html"> <i
 							class="fa fa-circle-o"></i> 路径规划
 					</a></li>
 <%--					<li id="system-setting"><a--%>
