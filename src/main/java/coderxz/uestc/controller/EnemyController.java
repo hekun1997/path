@@ -20,9 +20,9 @@ public class EnemyController {
         return enemyService.queryEnemy(2,2);
     }
 
-    @RequestMapping(value = "/runAPF",method = RequestMethod.GET,produces = "application/json; charset=utf-8")
-    public String runAPF(@ModelAttribute APFParams apfParams){
-        System.out.println(apfParams.getEnemys());
+    @RequestMapping(value = "/runAPF", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public String runAPF1(@RequestBody APFParams apfParams){
+        System.out.println(apfParams);
         return enemyService.runAPF(apfParams);
     }
 }

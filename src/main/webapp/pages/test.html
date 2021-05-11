@@ -16,6 +16,8 @@
         input,p { margin-top: 10px; margin-left: 5px; font-size: 14px;  }
     </style>
     <script>
+        var start, end;//start point, end point.
+        var startMarker, endMarker;//while remove marker, use this.
         var map, drivingRoute;
         var zoom = 13;
         var _CarTrack;
@@ -44,7 +46,7 @@
             map.enableScrollWheelZoom();
             /******************根据已知点集合绘制历史轨迹开始***********************/
 
-//线的一下基本配置
+            //线的一下基本配置
             var lineconfig={
                 color: "red",            //线的颜色
                 weight: 2,               //线的宽度
@@ -68,6 +70,26 @@
             //创建右键菜单对象
             var menu = new T.ContextMenu({width: 140});
             var txtMenuItem = [
+                {
+                    text: '将此处设为起点',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        removeMarker(startMarker)
+
+                        start = lnglat
+                        createStart(start)
+                    }
+                },
+                {
+                    text: '将此处设为终点',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        removeMarker(endMarker)
+
+                        end = lnglat
+                        createEnd(end)
+                    }
+                },
                 {
                     text: '获得右键点击处坐标',
                     isDisable: false,
@@ -159,6 +181,36 @@
             // map.addOverLay(endMarker);
         }
 
+        function createStart(startLngLat){
+            startMarker = new T.Marker(startLngLat, {
+                icon: new T.Icon({
+                    iconUrl: startIcon,
+                    iconSize: new T.Point(44, 34),
+                    iconAnchor: new T.Point(12, 31)
+                })
+            });
+            map.addOverLay(startMarker);
+        }
+
+        function createEnd(endLngLat){
+            endMarker = new T.Marker(endLngLat, {
+                icon: new T.Icon({
+                    iconUrl: endIcon,
+                    iconSize: new T.Point(44, 34),
+                    iconAnchor: new T.Point(12, 31)
+                })
+            });
+
+            map.addOverLay(endMarker);
+        }
+
+        function removeMarker(marker){
+            if(marker == null){
+                return
+            }
+            map.removeOverLay(marker)
+        }
+
         function searchResult(result) {
             //添加起始点
             //createStartMarker(result);
@@ -173,16 +225,30 @@
 
             }
         }
+
         function linetell() {
+            if (start == null){
+                alert("请设置起点！");
+                return;
+            }
+            if (end == null){
+                alert("请设置终点！");
+                return;
+            }
+
+            var data = {
+                start:"(" + start.getLng() + "," + start.getLat() + ")",
+                end:"(" + end.getLng() + "," + end.getLat() + ")",
+                obstacles:[ "(103.9548644, 31.29281989)", "(103.9551422, 31.29254211)"],
+                enemys:["(103.90542, 31.33254211)"]
+            }
+            console.log(JSON.stringify(data))
             $.ajax({
-                type:"GET",
-                url:"/enemy/runAPF",
-                data:{
-                    start:"(103.90542,31.33476433)",
-                    end:"(103.9620867,31.25198656)",
-                    obstacles:"[(103.9548644, 31.29281989),(103.9551422, 31.29254211)]",
-                    enemys:"[(103.90542, 31.33254211)]"
-                },
+                type:"POST",
+                contentType: "application/json",
+                url:"/uestc_demo_war/enemy/runAPF",
+                data:JSON.stringify(data),
+                dataType: 'json',
                 success:function (res) {
                     var result = res.data[0]  //算法的返回值
                     var str = result.substr(1,result.length-2)
@@ -207,6 +273,9 @@
                     var line = new T.Polyline(points,lineconfig);//创建线条的对象
                     //向地图上添加线
                     map.addOverLay(line);
+                },
+                error: function (){
+                    alert("失败！")
                 }
             });
         }
