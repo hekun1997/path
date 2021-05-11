@@ -42,8 +42,8 @@
             //允许鼠标滚轮缩放地图
             drivingRoute = new T.DrivingRoute(map, config);
             //console.log(drivingRoute)
-            searchDrivingRoute1()
-            searchDrivingRoute2()
+            // searchDrivingRoute1()
+            // searchDrivingRoute2()
             map.enableScrollWheelZoom();
             /******************根据已知点集合绘制历史轨迹开始***********************/
 
@@ -56,16 +56,17 @@
             };
 
             //创建点对象集合并创建几个点放进集合中
-            var points = new Array();
-            points[0]=new T.LngLat(116.318090, 39.920270);
-            points[1]=new T.LngLat(116.211, 39.820272);
-            points[2]=new T.LngLat(116.1, 39.920276);
-            points[3]=new T.LngLat(116.1, 39.720276);
-
-            var line = new T.Polyline(points,lineconfig);//创建线条的对象
-
-            //向地图上添加线
-            map.addOverLay(line);
+            // var points = new Array();
+            // points[0]=new T.LngLat(116.318090, 39.920270);
+            // points[1]=new T.LngLat(116.211, 39.820272);
+            // points[2]=new T.LngLat(116.1, 39.920276);
+            // points[3]=new T.LngLat(116.1, 39.720276);
+            //
+            // var line = new T.Polyline(points,lineconfig);//创建线条的对象
+            //
+            // //向地图上添加线
+            // map.addOverLay(line);
+            createInintLine(lineconfig);
 
             /******************根据已知点集合绘制历史轨迹结束***********************/
             //创建右键菜单对象
@@ -210,6 +211,35 @@
                 return
             }
             map.removeOverLay(marker)
+        }
+
+        function createInintLine(lineconfig){
+            var points = new Array();
+            points[0]=new T.LngLat(103.9054, 31.33643);//upper left corner.
+            points[1]=new T.LngLat(104.0096, 31.33643);
+            //points[2]=new T.LngLat(103.9054, 31.24615);
+            //points[3]=new T.LngLat(104.0096, 31.24615);//lower right corner.
+
+            var line = new T.Polyline(points,lineconfig);
+            map.addOverLay(line);
+
+            points[0]=new T.LngLat(104.0096, 31.33643);
+            points[1]=new T.LngLat(104.0096, 31.24615);
+
+            var line = new T.Polyline(points,lineconfig);
+            map.addOverLay(line);
+
+            points[0]=new T.LngLat(104.0096, 31.24615);
+            points[1]=new T.LngLat(103.9054, 31.24615);
+
+            var line = new T.Polyline(points,lineconfig);
+            map.addOverLay(line);
+
+            points[0]=new T.LngLat(103.9054, 31.33643);
+            points[1]=new T.LngLat(103.9054, 31.24615);
+
+            var line = new T.Polyline(points,lineconfig);
+            map.addOverLay(line);
         }
 
         function searchResult(result) {
