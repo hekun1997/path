@@ -18,6 +18,7 @@
     <script>
         var start, end;//start point, end point.
         var startMarker, endMarker;//while remove marker, use this.
+        var line; //the planned route back-end return.
         var map, drivingRoute;
         var zoom = 13;
         var _CarTrack;
@@ -250,6 +251,9 @@
                 data:JSON.stringify(data),
                 dataType: 'json',
                 success:function (res) {
+
+                    removeMarker(line)
+
                     var result = res.data[0]  //算法的返回值
                     var str = result.substr(1,result.length-2)
                     var regex1 = /\((.+?)\)/g; // () 小括号
@@ -270,7 +274,7 @@
                         points[i]=new T.LngLat(parseFloat(temp[0].substr(1,temp[0].length-1)), parseFloat(temp[1].substr(0,temp[1].length-2)));
                     }
 
-                    var line = new T.Polyline(points,lineconfig);//创建线条的对象
+                    line = new T.Polyline(points,lineconfig);//创建线条的对象
                     //向地图上添加线
                     map.addOverLay(line);
                 },
