@@ -18,7 +18,13 @@
     <script>
         var start, end;//start point, end point.
         var startMarker, endMarker;//while remove marker, use this.
+
         var line; //the planned route back-end return.
+
+        var obstacle = new Array();//store obstacles in array, value is the localtion of obstacle.
+
+        var glayer;
+
         var map, drivingRoute;
         var zoom = 13;
         var _CarTrack;
@@ -76,20 +82,20 @@
                     text: '将此处设为起点',
                     isDisable: false,
                     callback: function (lnglat) {
-                        removeMarker(startMarker)
+                        removeMarker(startMarker);
 
-                        start = lnglat
-                        createStart(start)
+                        start = lnglat;
+                        createStart(start);
                     }
                 },
                 {
                     text: '将此处设为终点',
                     isDisable: false,
                     callback: function (lnglat) {
-                        removeMarker(endMarker)
+                        removeMarker(endMarker);
 
-                        end = lnglat
-                        createEnd(end)
+                        end = lnglat;
+                        createEnd(end);
                     }
                 },
                 {
@@ -105,13 +111,21 @@
                     callback: function (lnglat) {
                         var marker = new T.Marker(new T.LngLat(lnglat.getLng(), lnglat.getLat()));
                         map.addOverLay(marker);
+
+                        obstacle[obstacle.length] = lnglat;
                     }
                 },{
-                    text: '添加网格',
+                    text: '添加/删除 网格',
                     isDisable: false,
                     callback: function (lnglat) {
-                        glayer = new T.GridlineLayer({ });
-                        map.addOverLay(glayer);
+
+                        if(glayer == null){
+                            glayer = new T.GridlineLayer({ });
+                            map.addOverLay(glayer);
+                        }else{
+                            removeMarker(glayer);
+                        }
+
                     }
                 },
                 {
@@ -210,7 +224,7 @@
             if(marker == null){
                 return
             }
-            map.removeOverLay(marker)
+            map.removeOverLay(marker);
         }
 
         function createInintLine(lineconfig){
