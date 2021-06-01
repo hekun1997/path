@@ -1,12 +1,15 @@
 package coderxz.uestc.service.Impl;
 
+import coderxz.uestc.config.PythonConfig;
 import coderxz.uestc.dao.EnemyMapper;
 import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
-import coderxz.uestc.util.NR;
+import coderxz.uestc.util.Response;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
@@ -16,8 +19,15 @@ import java.util.List;
 
 @Service
 public class EnemyServiceImpl implements EnemyService {
+
+    @Autowired
+    private static final Logger log = LoggerFactory.getLogger(EnemyService.class);
+
     @Autowired
     private EnemyMapper enemyMapper;
+    @Autowired
+    private PythonConfig pythonConfig;
+
     @Override
     public List<Enemy> queryEnemy(Integer page, Integer size) {
         System.out.println(page);
@@ -43,23 +53,25 @@ public class EnemyServiceImpl implements EnemyService {
         String end = apfParams.getEnd();
         String obstacles = apfParams.getObstacles().toString().replace("[[","[").replace("]]","]");
         String enemys = apfParams.getEnemys().toString().replace("[[","[").replace("]]","]");
-        List<String> res= new LinkedList<>();
+        List<String> retVal= new LinkedList<>();
         String line;
         try{
             //从第三个参数开始为算法的入参
-            String[] comm=new String[]{"D:\\Anaconda3\\python.exe", "F:\\UESTC\\apf_enemy\\RunTheProject.py", start,end,obstacles,enemys};
+            String filePath = pythonConfig.getProjectPath() + "\\RunTheProject.py";
+            String[] comm=new String[]{pythonConfig.getPath(), filePath, start, end, obstacles, enemys};
             Process pr = Runtime.getRuntime().exec(comm);
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));
             while ((line = in.readLine()) != null) {
-                res.add(line);
-                System.out.println(line);
+                retVal.add(line);
+                log.info(line);
             }
             in.close();
             pr.waitFor();
         } catch (Exception e){
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
-        return NR.r(res);
+        return Response.success(retVal);
     }
+
 }

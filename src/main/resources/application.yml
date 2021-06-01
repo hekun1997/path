@@ -2,7 +2,7 @@
 spring:
 #配置数据库数据源等信息
   datasource:
-    url: jdbc:mysql://localhost:3306/uestc?characterEncoding=utf-8
+    url: jdbc:mysql://182.92.196.143:3306/uestc?characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
