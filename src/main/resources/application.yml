@@ -1,6 +1,9 @@
-
 spring:
-#配置数据库数据源等信息
+  mvc:
+    view:
+      prefix: /pages/
+      suffix: .jsp
+  #配置数据库数据源等信息
   datasource:
     url: jdbc:mysql://182.92.196.143:3306/uestc?characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver

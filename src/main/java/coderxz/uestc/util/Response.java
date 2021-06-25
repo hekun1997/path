@@ -3,6 +3,7 @@ package coderxz.uestc.util;
 import com.alibaba.fastjson.JSONObject;
 
 public class Response<T> {
+
     public static String success(Object data) {
         JSONObject object = new JSONObject(true);
         object.put("code", 2000);

@@ -6,6 +6,7 @@ import coderxz.uestc.entity.Enemy;
 import java.util.List;
 
 public interface EnemyService {
+
     /**
      * 分页查询所有的实体
      * @param page
@@ -21,7 +22,6 @@ public interface EnemyService {
      * @return
      */
     List<Enemy>queryEnemyByArea(Integer x,Integer y);
-
 
     String runAPF(APFParams apfParams);
 

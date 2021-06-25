@@ -1,6 +1,5 @@
 package coderxz.uestc;
 
-import coderxz.uestc.config.PythonConfig;
 import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.service.EnemyService;
 import org.junit.Test;
@@ -11,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,21 +21,23 @@ public class UestcDemoApplicationTests {
     @Autowired
     private EnemyService enemyService;
 
-    @Autowired
-    private PythonConfig pythonConfig;
-
     @Test
     public void contextLoads() {
+
+    }
+
+    @Test
+    public void enemyQueryTest() {
         enemyService.queryEnemy(0,50).forEach(System.out::println);
     }
 
     @Test
     public void testAPF(){
         APFParams apfParams = new APFParams();
-        apfParams.setStart("(103.93066,31.32343)");
-        apfParams.setEnd("(103.99006,31.31375)");
-        apfParams.setObstacles(Arrays.asList("(103.9548644, 31.29281989)", "(103.9551422, 31.29254211)"));//[(103.9548644, 31.29281989), (103.9551422, 31.29254211)]
-        apfParams.setEnemys(Arrays.asList("[(103.90542, 31.33254211)]"));
+        apfParams.setStart("(103.92363, 31.26324)");
+        apfParams.setEnd("(103.9959, 31.28437)");
+        apfParams.setObstacles(new ArrayList<>());//[(103.9548644, 31.29281989), (103.9551422, 31.29254211)]
+        apfParams.setEnemys(new ArrayList<>());
 
         String start = apfParams.getStart();
         String end = apfParams.getEnd();
@@ -45,13 +46,20 @@ public class UestcDemoApplicationTests {
         List<String> res= new LinkedList<>();
 
         String line;
+
         try{
             //从第三个参数开始为算法的入参
             // String[] comm = new String[]{"C:\\ProgramData\\Anaconda3\\python.exe", "C:\\D-drive-37093\\PycharmWorkSpace\\apf_enemy\\RunTheProject.py", start,end,obstacles,enemys};
-            String comm = "python C:\\D-drive-37093\\PycharmWorkSpace\\apf_enemy\\RunTheProject.py \"" + start + "\" "
-                    + "\"" + end + "\" " + "\"" + obstacles + "\" " + "\"" + enemys + "\" ";
+            String filePath = "C:\\D-drive-37093\\PycharmWorkSpace\\apf_enemy\\Artificial_Potential_Field_Method.py";
+            String[] comm=new String[]{"C:\\ProgramData\\Anaconda3\\python.exe", filePath, start, end, obstacles, enemys};
+
             Process pr = Runtime.getRuntime().exec(comm);
 
+            BufferedReader err = new BufferedReader(new InputStreamReader(pr.getErrorStream(),"GBK"));
+            while ((line = err.readLine()) != null) {
+                res.add(line);
+                System.out.println(line);
+            }
 
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));
             while ((line = in.readLine()) != null) {
@@ -68,9 +76,4 @@ public class UestcDemoApplicationTests {
         System.out.println(res);
     }
 
-    @Test
-    public void testPythonConfig(){
-        System.out.println(pythonConfig.getProjectPath());
-        System.out.println(pythonConfig.getPath());
-    }
 }

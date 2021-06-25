@@ -3,11 +3,11 @@ package coderxz.uestc.dao;
 import coderxz.uestc.entity.Enemy;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public interface EnemyMapper extends BaseMapper<Enemy> {
 

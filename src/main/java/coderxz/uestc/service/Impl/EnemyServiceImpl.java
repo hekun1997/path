@@ -1,32 +1,31 @@
 package coderxz.uestc.service.Impl;
 
-import coderxz.uestc.config.PythonConfig;
 import coderxz.uestc.dao.EnemyMapper;
 import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
 import coderxz.uestc.util.Response;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
 import java.util.LinkedList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class EnemyServiceImpl implements EnemyService {
 
     @Autowired
-    private static final Logger log = LoggerFactory.getLogger(EnemyService.class);
-
-    @Autowired
     private EnemyMapper enemyMapper;
-    @Autowired
-    private PythonConfig pythonConfig;
 
     @Override
     public List<Enemy> queryEnemy(Integer page, Integer size) {
@@ -53,18 +52,30 @@ public class EnemyServiceImpl implements EnemyService {
         String end = apfParams.getEnd();
         String obstacles = apfParams.getObstacles().toString().replace("[[","[").replace("]]","]");
         String enemys = apfParams.getEnemys().toString().replace("[[","[").replace("]]","]");
+
         List<String> retVal= new LinkedList<>();
         String line;
+        
         try{
             //从第三个参数开始为算法的入参
-            String filePath = pythonConfig.getProjectPath() + "\\RunTheProject.py";
-            String[] comm=new String[]{pythonConfig.getPath(), filePath, start, end, obstacles, enemys};
+            //String filePath = "C:\\D-drive-37093\\research\\apf_enemy\\RunTheProject.py";
+            String filePath = "C:\\D-drive-37093\\PycharmWorkSpace\\apf_enemy\\Artificial_Potential_Field_Method.py";
+            String[] comm = new String[]{"C:\\ProgramData\\Anaconda3\\python.exe", filePath, start, end, obstacles, enemys};
+
             Process pr = Runtime.getRuntime().exec(comm);
+
+            BufferedReader err = new BufferedReader(new InputStreamReader(pr.getErrorStream(),"GBK"));
+            while ((line = err.readLine()) != null) {
+                retVal.add(line);
+                log.error(line);
+            }
+
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));
             while ((line = in.readLine()) != null) {
                 retVal.add(line);
                 log.info(line);
             }
+            err.close();
             in.close();
             pr.waitFor();
         } catch (Exception e){
