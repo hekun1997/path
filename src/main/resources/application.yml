@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://182.92.196.143:3306/uestc?characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
-    username: root
+    username: noroot
     password: 123456
     initialization-mode: embedded
     #指定数据源
@@ -80,4 +80,8 @@ mybatis-plus:
 #  reasonable: true
 #  support-methods-arguments: true
 #  params: count=countSql
+pythonPath: "D:\\Anaconda\\envs\\tensorflow1.8\\python.exe" # "C:\\ProgramData\\Anaconda3\\python.exe"
+partialRoutePlan: "D:\\PycharmWorkSpace\\apf_enemy\\Artificial_Potential_Field_Method.py"
+createObstacleFromGdal: "D:\\PycharmWorkSpace\\apf_enemy\\obs_java.py"
+
 

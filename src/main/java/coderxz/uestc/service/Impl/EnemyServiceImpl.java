@@ -5,6 +5,7 @@ import coderxz.uestc.dto.APFParams;
 import coderxz.uestc.entity.Enemy;
 import coderxz.uestc.service.EnemyService;
 import coderxz.uestc.util.Response;
+import coderxz.uestc.util.Utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -19,6 +21,7 @@ import java.io.InputStreamReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -26,6 +29,12 @@ public class EnemyServiceImpl implements EnemyService {
 
     @Autowired
     private EnemyMapper enemyMapper;
+    @Value("${partialRoutePlan}")
+    private String partialFilePath;
+    @Value("${createObstacleFromGdal}")
+    private String createObstacleFromGdal;
+    @Value("${pythonPath}")
+    private String pythonPath;
 
     @Override
     public List<Enemy> queryEnemy(Integer page, Integer size) {
@@ -48,41 +57,18 @@ public class EnemyServiceImpl implements EnemyService {
 
     @Override
     public String runAPF(APFParams apfParams) {
-        String start = apfParams.getStart();
-        String end = apfParams.getEnd();
-        String obstacles = apfParams.getObstacles().toString().replace("[[","[").replace("]]","]");
-        String enemys = apfParams.getEnemys().toString().replace("[[","[").replace("]]","]");
+        List<String> retVal = Utils.callPython(apfParams, pythonPath, partialFilePath);
 
-        List<String> retVal= new LinkedList<>();
-        String line;
-        
-        try{
-            //从第三个参数开始为算法的入参
-            //String filePath = "C:\\D-drive-37093\\research\\apf_enemy\\RunTheProject.py";
-            String filePath = "C:\\D-drive-37093\\PycharmWorkSpace\\apf_enemy\\Artificial_Potential_Field_Method.py";
-            String[] comm = new String[]{"C:\\ProgramData\\Anaconda3\\python.exe", filePath, start, end, obstacles, enemys};
-
-            Process pr = Runtime.getRuntime().exec(comm);
-
-            BufferedReader err = new BufferedReader(new InputStreamReader(pr.getErrorStream(),"GBK"));
-            while ((line = err.readLine()) != null) {
-                retVal.add(line);
-                log.error(line);
-            }
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));
-            while ((line = in.readLine()) != null) {
-                retVal.add(line);
-                log.info(line);
-            }
-            err.close();
-            in.close();
-            pr.waitFor();
-        } catch (Exception e){
-            log.error(e.getMessage());
+        if (Objects.isNull(retVal)){
+            return Response.failed(null);
         }
-
         return Response.success(retVal);
     }
 
+    @Override
+    public List<String> getObstacle(APFParams apfParams) {
+        List<String> retVal = Utils.callPython(apfParams, pythonPath, createObstacleFromGdal);
+
+        return retVal;
+    }
 }

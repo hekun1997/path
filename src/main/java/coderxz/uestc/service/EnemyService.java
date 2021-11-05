@@ -25,4 +25,10 @@ public interface EnemyService {
 
     String runAPF(APFParams apfParams);
 
+    /**
+     * 只是调用python读取高程数据，判断不可达点。后期可能会寻找python实现d star lite的方法。
+     * @param apfParams
+     * @return
+     */
+    List<String> getObstacle(APFParams apfParams);
 }
