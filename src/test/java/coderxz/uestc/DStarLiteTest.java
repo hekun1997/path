@@ -1,12 +1,19 @@
 package coderxz.uestc;
 
 import coderxz.uestc.dstarlite.*;
+import com.github.sh0nk.matplotlib4j.Plot;
+import com.github.sh0nk.matplotlib4j.PythonConfig;
+import lombok.SneakyThrows;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DStarLiteTest {
+    private static final String PYTHON_PATH = "D:\\Anaconda\\envs\\tensorflow1.8\\python.exe";
+
     static Position start = new Position(0, 0);
     static Position goal = new Position(9, 9);
     static List<Position> walls = new ArrayList<Position>();
@@ -43,55 +50,34 @@ public class DStarLiteTest {
 
         DStarLite dStarLite = new DStarLite(gridProblem);
         //       List<State> states = dStarLite.getShortestPath();
-        drawEnv(dStarLite.getShortestPath());
+        List<Position> path = new ArrayList<>();
 
-        start = new Position(4, 5);
-        gridProblem.setStart(start.getX(), start.getY());
-        gridProblem.setWallAndChange(5, 5);
-        walls.add(new Position(5, 5));
-
-        drawEnv(dStarLite.getShortestPath());
-    }
-
-    public static String checkPos(int x, int y){
-        if (x == start.getX() && y == start.getY()){
-            return "s ";
-        }
-        else if (x == goal.getX() && y == goal.getY()){
-            return "g ";
-        }
-        else if (walls.contains(new Position(x, y))){
-            return "w ";
-        }
-        else if (path.contains(new Position(x, y))){
-            return "- ";
-        }
-        return "  ";
-    }
-
-    public static void drawEnv(List<State> states){
-        if (!path.isEmpty()){
-            path.clear();
-        }
-
-        for(State state : states){
+        for(State state : dStarLite.getShortestPath()){
             Cell cell = (Cell)state;
             path.add(new Position(cell.getX(), cell.getY()));
         }
+        drawAll(start, goal, walls, path);
+    }
 
-        for(int _y = MAX_Y - 1; _y > -1; _y --){
-            StringBuilder buffer = new StringBuilder(_y + " ");
-            for (int _x = 0; _x < MAX_X; _x ++){
+    @SneakyThrows
+    private void drawAll(Position start, Position goal, List<Position> walls, List<Position> path){
+        Plot plt = Plot.create(PythonConfig.pythonBinPathConfig(PYTHON_PATH));
 
-                buffer.append(checkPos(_x, _y));
+        plt.plot().add(Arrays.asList((double)start.getX()), Arrays.asList((double)start.getY()), "or").label("start");
+        plt.plot().add(Arrays.asList((double)goal.getX()), Arrays.asList((double)goal.getY()), "*r").label("goal");
 
-            }
-            System.out.println(buffer);
-        }
-        System.out.print("  ");
-        for (int _x = 0; _x < MAX_X; _x ++){
-            System.out.print(_x + " ");
-        }
-        System.out.println("\n");
+        plt.plot().add(walls.stream().map(w -> (double)w.getX()).collect(Collectors.toList()),
+                        walls.stream().map(w -> (double)w.getY()).collect(Collectors.toList()), "xk")
+                .label("obstacle");
+
+        plt.plot().add(path.stream().map(p -> (double)p.getX()).collect(Collectors.toList()),
+                        path.stream().map(p -> (double)p.getY()).collect(Collectors.toList()))
+                .label("path").linestyle("--");
+
+        plt.xlabel("X");
+        plt.ylabel("Y");
+        plt.title("Route Plan");
+        plt.legend();
+        plt.show();
     }
 }
