@@ -51,6 +51,7 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         Position goal = Utils.lngLat2xy(goalGeo, mapParams);
 
         List<String> obstacleStr = enemyService.getObstacle(apfParams);
+        System.out.println("extract obstacle----------->>>>>>>>>>" + obstacleStr);
         //convert enemies
         apfParams.getObstacles().addAll(apfParams.getEnemys());
         List<Obstacle> inputObstacles = Utils.convertInputObstacles(apfParams.getObstacles(), mapParams);

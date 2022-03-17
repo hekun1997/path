@@ -16,6 +16,8 @@ public class RoutePlanController {
     @RequestMapping(value = "/global", produces = "application/json; charset=utf-8")
     public String globalPathPlanning(@RequestBody APFParams apfParams){
         System.out.println(apfParams);
-        return routePlanService.global(apfParams);
+        String result = routePlanService.global(apfParams);
+        System.out.println(result);
+        return result;
     }
 }

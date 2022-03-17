@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
-Built-By: Nathan
-Build-Jdk: 1.8.0_231
+Built-By: hekun
+Build-Jdk: version 1.8.0_302
 Implementation-Title: uestc-demo
 Implementation-Version: 0.0.1-SNAPSHOT
 Implementation-Vendor-Id: coderxz

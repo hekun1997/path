@@ -23,6 +23,8 @@ public class EnemyController {
     @RequestMapping(value = "/runAPF", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     public String runAPF1(@RequestBody APFParams apfParams){
         System.out.println(apfParams);
-        return enemyService.runAPF(apfParams);
+        String result = enemyService.runAPF(apfParams);
+        System.out.println(result);
+        return result;
     }
 }

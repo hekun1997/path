@@ -24,6 +24,7 @@ public class DStarLiteTest {
 
     @Test
     public void path_planning_1(){
+        long start_time = System.currentTimeMillis();
         GridProblem gridProblem = new GridProblem(MAX_X, MAX_Y);
         gridProblem.setStart(start.getX(), start.getY());
         gridProblem.setGoal(goal.getX(), goal.getY());
@@ -40,11 +41,16 @@ public class DStarLiteTest {
             Cell cell = (Cell)state;
             path.add(new Position(cell.getX(), cell.getY()));
         }
+        double time = (System.currentTimeMillis() - start_time) / (1000.0);
+        System.out.println(time + "s");
         drawAll(start, goal, walls, path);
+
     }
 
     @Test
     public void path_planning_2(){
+        long start_time = System.currentTimeMillis();
+
         Position start = new Position(50, 20);
         Position goal = new Position(50, 42);
         List<Position> walls = new ArrayList<Position>();
@@ -84,11 +90,15 @@ public class DStarLiteTest {
             Cell cell = (Cell)state;
             path.add(new Position(cell.getX(), cell.getY()));
         }
+        double time = (System.currentTimeMillis() - start_time) / (1000.0);
+        System.out.println(time + "s");
         drawAll(start, goal, walls, path);
     }
 
     @Test
     public void path_planning_3(){
+        long start_time = System.currentTimeMillis();
+
         Position start = new Position(0, 0);
         Position goal = new Position(20, 20);
         List<Position> walls = new ArrayList<Position>();
@@ -119,12 +129,15 @@ public class DStarLiteTest {
             Cell cell = (Cell)state;
             path.add(new Position(cell.getX(), cell.getY()));
         }
+        double time = (System.currentTimeMillis() - start_time) / (1000.0);
+        System.out.println(time + "s");
         System.out.println(path);
         drawAll(start, goal, walls, path);
     }
 
     @Test
     public void path_planning_4(){
+        long start_time = System.currentTimeMillis();
         int maxX = 60;
         Position start = new Position(0, 0);
         Position goal = new Position(maxX, maxX);
@@ -139,35 +152,35 @@ public class DStarLiteTest {
         for (int i = 0; i < 30; i++){
             walls.add(new Position(x + i, y));
         }
-        x = 10;
-        y = 10;
-        for (int i = 0; i < 40; i++){
-            walls.add(new Position(x, y + i));
-        }
-
-        x = 40;
-        y = 30;
-        for (int i = 0; i < 20; i++){
-            walls.add(new Position(x, y + i));
-        }
-
-        x = 30;
-        y = 35;
-        for (int i = 0; i < 20; i++){
-            walls.add(new Position(x, y + i));
-        }
-
-        x = 35;
-        y = 0;
-        for (int i = 0; i < 30; i++){
-            walls.add(new Position(x, y + i));
-        }
-
-        x = 45;
-        y = 45;
-        for (int i = 0; i < 15; i++){
-            walls.add(new Position(x, y + i));
-        }
+//        x = 10;
+//        y = 10;
+//        for (int i = 0; i < 40; i++){
+//            walls.add(new Position(x, y + i));
+//        }
+//
+//        x = 40;
+//        y = 30;
+//        for (int i = 0; i < 20; i++){
+//            walls.add(new Position(x, y + i));
+//        }
+//
+//        x = 30;
+//        y = 35;
+//        for (int i = 0; i < 20; i++){
+//            walls.add(new Position(x, y + i));
+//        }
+//
+//        x = 35;
+//        y = 0;
+//        for (int i = 0; i < 30; i++){
+//            walls.add(new Position(x, y + i));
+//        }
+//
+//        x = 45;
+//        y = 45;
+//        for (int i = 0; i < 15; i++){
+//            walls.add(new Position(x, y + i));
+//        }
 
         GridProblem gridProblem = new GridProblem(MAX_X, MAX_Y);
         gridProblem.setStart(start.getX(), start.getY());
@@ -185,12 +198,15 @@ public class DStarLiteTest {
             Cell cell = (Cell)state;
             path.add(new Position(cell.getX(), cell.getY()));
         }
+        double time = (System.currentTimeMillis() - start_time) / (1000.0);
+        System.out.println(time + "s");
         System.out.println(path);
         drawAll(start, goal, walls, path);
     }
 
     @Test
     public void path_planning_5(){
+        long start_time = System.currentTimeMillis();
         int maxX = 60;
         Position start = new Position(0, 0);
         Position goal = new Position(maxX, maxX);
@@ -269,6 +285,8 @@ public class DStarLiteTest {
             Cell cell = (Cell)state;
             path.add(new Position(cell.getX(), cell.getY()));
         }
+        double time = (System.currentTimeMillis() - start_time) / (1000.0);
+        System.out.println(time + "s");
         System.out.println(path);
         drawAll(start, goal, walls, path);
     }
