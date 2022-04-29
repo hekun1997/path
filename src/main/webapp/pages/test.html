@@ -168,20 +168,20 @@
 
                     }
                 },
-                {
-                    text: '添加车辆',
-                    isDisable: false,
-                    callback: function (lnglat) {
-                        var icon = new T.Icon({
-                            iconUrl: "./car.jpg",
-                            iconSize: new T.Point(19, 27),
-                            iconAnchor: new T.Point(10, 25)
-                        });
-                        //向地图上添加自定义标注
-                        var marker = new T.Marker(new T.LngLat(lnglat.getLng(), lnglat.getLat()), {icon: icon});
-                        map.addOverLay(marker);
-                    }
-                }
+                // {
+                //     text: '添加车辆',
+                //     isDisable: false,
+                //     callback: function (lnglat) {
+                //         var icon = new T.Icon({
+                //             iconUrl: "./car.jpg",
+                //             iconSize: new T.Point(19, 27),
+                //             iconAnchor: new T.Point(10, 25)
+                //         });
+                //         //向地图上添加自定义标注
+                //         var marker = new T.Marker(new T.LngLat(lnglat.getLng(), lnglat.getLat()), {icon: icon});
+                //         map.addOverLay(marker);
+                //     }
+                // }
             ];
 
             for (var i = 0; i < txtMenuItem.length; i++) {
@@ -383,6 +383,8 @@
         function linetell(url, type) {
             // the function name is goal.
             //searchRouteFromApi(start, end)
+            url = '/' + window.location.pathname.split('/')[1] + url
+
             let _start_end = returnLngLatWithType(type);
             let _start = _start_end[0];
             let _end = _start_end[1];
@@ -455,10 +457,10 @@
 <!--    <input type="button" value="开始" onClick="_CarTrack.start();"/>-->
 <!--    <input type="button" value="暂停" onClick="_CarTrack.pause();"/>-->
 <!--    <input type="button" value="结束" onClick="_CarTrack.stop();"/>-->
-<!--    <input type="button" value="开启" onClick="lineTool.open();"/>-->
-<!--    <input type="button" value="关闭" onClick="lineTool.close();"/>-->
-    <input type="button" value="局部路径规划" onClick="linetell('/uestc_demo_war/enemy/runAPF', 'part');"/>
-    <input type="button" value="全局路径规划" onClick="linetell('/uestc_demo_war/path/global', 'global');"/>
+<!--   <input type="button" value="开启" onClick="lineTool.open();"/>-->
+<!--    <input type="button" value="关闭" onClick="lineTool.close();" /uestc_demo_war />-->
+    <input type="button" value="局部路径规划" onClick="linetell('/enemy/runAPF', 'part');"/>
+    <input type="button" value="全局路径规划" onClick="linetell('/path/global', 'global');"/>9+
 </div>
 
 </body>

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,9 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         obstacles.addAll(inputObstacles);
 
         List<Position> path = Utils.runDStartLite(start, goal, obstacles, mapParams);
-        this.drawAll(start, goal, obstacles.stream().map(o -> new Position(o.getPosition().getX(), o.getPosition().getY())).collect(Collectors.toList()), path);
+        if (System.getProperties().getProperty("os.name").toLowerCase().contains("windows")) {
+            this.drawAll(start, goal, obstacles.stream().map(o -> new Position(o.getPosition().getX(), o.getPosition().getY())).collect(Collectors.toList()), path);
+        }
         String retVal =  Utils.assembleGeoPath(path, mapParams).toString();
         return Response.success(Arrays.asList(retVal));
     }

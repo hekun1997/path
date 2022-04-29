@@ -1,13 +1,13 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   mvc:
     view:
       prefix: /pages/
       suffix: .jsp
   #配置数据库数据源等信息
   datasource:
-    url: jdbc:mysql://182.92.196.143:3306/uestc?characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/uestc?characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
     username: noroot
     password: 123456
@@ -67,13 +67,13 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false  #驼峰命名映射，默认是开启的，由于我的数据库中的字段没有采用驼峰命名，
 
-#mybatis配置
-#mybatis:
-#  type-aliases-package: coderxz.uestc.entity
+  #mybatis配置
+  #mybatis:
+  #  type-aliases-package: coderxz.uestc.entity
   #如果xml文件没有放在接口方法的同一目录之下，我们也可以指定目录,如果想放在同一目录，创建文件夹时，coderxz\mybatis\mapper，这样在
   #编译时，会将此文件夹与java源代码文件夹的coderxz.mybatis.mapper文件夹合并
- # mapper-locations: classpath:mybatis/mapper/*.xml
- #config-location: classpath:mybatis/config/mybatis-config.xml
+  # mapper-locations: classpath:mybatis/mapper/*.xml
+  #config-location: classpath:mybatis/config/mybatis-config.xml
 
 # PageHelper分页配置
 # 分页配置
@@ -82,8 +82,8 @@ mybatis-plus:
 #  reasonable: true
 #  support-methods-arguments: true
 #  params: count=countSql
-pythonPath: "D:\\Anaconda\\envs\\tensorflow1.8\\python.exe" # "C:\\ProgramData\\Anaconda3\\python.exe"
-partialRoutePlan: "D:\\PycharmWorkSpace\\apf_enemy\\Artificial_Potential_Field_Method.py"
-createObstacleFromGdal: "D:\\PycharmWorkSpace\\apf_enemy\\obs_java.py"
+pythonPath: "/usr/bin/python3" # "C:\\ProgramData\\Anaconda3\\python.exe"
+partialRoutePlan: "/root/apf_enemy/Artificial_Potential_Field_Method.py"
+createObstacleFromGdal: "/root/apf_enemy/obs_java.py"
 
 
